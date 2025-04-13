@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: rider
+
+  output:
+    ansi:
+      enabled: always
