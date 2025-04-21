@@ -29,7 +29,7 @@ public class RiderController {
   @PostMapping("/v0/signup")
   @PermitAll
   public ResponseEntity<Void> singup(@RequestBody SignupRequest request) {
-    riderUsecase.signup(request.email(), request.nickname(), request.password());
+    riderUsecase.signup(request.email(), request.name(), request.password());
     return ResponseEntity.noContent().build();
   }
 }

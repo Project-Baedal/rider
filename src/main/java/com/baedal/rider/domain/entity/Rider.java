@@ -31,7 +31,7 @@ public class Rider {
   private String email;
 
   @Column(nullable = false)
-  private String nickname;
+  private String name;
 
   @Column(nullable = false)
   private String password;
@@ -39,9 +39,9 @@ public class Rider {
   @Column(nullable = false)
   private Boolean isOAuth2;
 
-  public Rider(String email, String nickname, String password) {
+  public Rider(String email, String name, String password) {
     this.email = email;
-    this.nickname = nickname;
+    this.name = name;
     this.password = password;
     this.isOAuth2 = false;
   }
