@@ -6,3 +6,6 @@ spring:
     ansi:
       enabled: always
 
+security:
+  permit-all:
+    urls: /v0/login, /v0/signup, /error
