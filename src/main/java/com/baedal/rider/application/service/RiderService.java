@@ -1,10 +1,12 @@
 package com.baedal.rider.application.service;
 
 import com.baedal.rider.adapter.presentation.response.LoginResponse;
+import com.baedal.rider.adapter.presentation.security.UserDetailsImpl;
 import com.baedal.rider.application.port.in.RiderUsecase;
 import com.baedal.rider.domain.entity.Rider;
 import com.baedal.rider.domain.repository.RiderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class RiderService implements RiderUsecase {
 
   private final RiderRepository repository;
+
   private final PasswordEncoder passwordEncoder;
+
+  private final UserDetailsService userDetailsService;
 
   @Transactional
   public void signup(String email, String nickname, String rawPassword) {
@@ -22,19 +27,17 @@ public class RiderService implements RiderUsecase {
     repository.save(rider);
   }
 
-  @Override
+  @Transactional(readOnly = true)
   public LoginResponse authenticate(String email, String password) {
-    // TODO: Authentication Exception 정의
-    Rider rider = repository.findByEmail(email)
-        .orElseThrow(() -> new RuntimeException("Wrong email or password"));
+    UserDetailsImpl user = (UserDetailsImpl) userDetailsService.loadUserByUsername(email);
 
-    if (!passwordEncoder.matches(password, rider.getPassword())) {
-      throw new RuntimeException("Wrong email or password");
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+      // FIXME: Define Exception Class
+      throw new IllegalArgumentException("Invalid email or password");
     }
 
     return new LoginResponse(
-        rider.getId(),
-        rider.getEmail()
+        user.rider().getId()
     );
   }
 }

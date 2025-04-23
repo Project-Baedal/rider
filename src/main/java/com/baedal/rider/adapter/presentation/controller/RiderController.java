@@ -4,6 +4,7 @@ import com.baedal.rider.adapter.presentation.request.LoginRequest;
 import com.baedal.rider.adapter.presentation.request.SignupRequest;
 import com.baedal.rider.adapter.presentation.response.LoginResponse;
 import com.baedal.rider.application.port.in.RiderUsecase;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +20,16 @@ public class RiderController {
   private final RiderUsecase riderUsecase;
 
   @PostMapping("/v0/login")
+  @PermitAll
   public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-    LoginResponse response = riderUsecase.authenticate(request.email(),
-        request.password());
+    LoginResponse response = riderUsecase.authenticate(request.email(), request.password());
     return ResponseEntity.ok(response);
   }
 
   @PostMapping("/v0/signup")
+  @PermitAll
   public ResponseEntity<Void> singup(@RequestBody SignupRequest request) {
-    riderUsecase.signup(request.email(), request.nickname(), request.password());
+    riderUsecase.signup(request.email(), request.name(), request.password());
     return ResponseEntity.noContent().build();
   }
 }
