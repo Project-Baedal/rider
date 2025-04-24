@@ -5,7 +5,9 @@ import com.baedal.rider.adapter.presentation.security.UserDetailsImpl;
 import com.baedal.rider.application.port.out.RiderRosterPort;
 import com.baedal.rider.domain.entity.Rider;
 import com.baedal.rider.domain.repository.RiderRepository;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RiderService {
 
   private final RiderRepository repository;
@@ -21,8 +24,10 @@ public class RiderService {
 
   private final UserDetailsService userDetailsService;
 
+  private final RiderRosterPort riderRosterPort;
+
   @Transactional
-  public void signup(String email, String nickname, String rawPassword) {
+  public void signUp(String email, String nickname, String rawPassword) {
     Rider rider = new Rider(email, nickname, passwordEncoder.encode(rawPassword));
     repository.save(rider);
   }
@@ -39,5 +44,19 @@ public class RiderService {
     return new LoginResponse(
         user.rider().getId()
     );
+  }
+
+  @Transactional
+  public void makeOnDuty(Long riderId) {
+    riderRosterPort.makeOnDuty(riderId);
+  }
+
+  @Transactional
+  public void makeOffDuty(Long riderId) {
+    riderRosterPort.makeOffDuty(riderId);
+  }
+
+  private Set<Long> findAllOnDuty() {
+    return riderRosterPort.findAllOnDuty();
   }
 }
