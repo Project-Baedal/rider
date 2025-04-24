@@ -1,4 +1,4 @@
-package com.baedal.rider.adapter.presentation.config;
+package com.baedal.rider.adapter.config;
 
 import com.baedal.rider.adapter.presentation.security.AuthFilter;
 import org.springframework.beans.factory.annotation.Value;
