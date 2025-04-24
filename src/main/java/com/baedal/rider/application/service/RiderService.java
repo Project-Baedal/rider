@@ -2,7 +2,7 @@ package com.baedal.rider.application.service;
 
 import com.baedal.rider.adapter.presentation.response.LoginResponse;
 import com.baedal.rider.adapter.presentation.security.UserDetailsImpl;
-import com.baedal.rider.application.port.in.RiderUsecase;
+import com.baedal.rider.application.port.out.RiderRosterPort;
 import com.baedal.rider.domain.entity.Rider;
 import com.baedal.rider.domain.repository.RiderRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class RiderService implements RiderUsecase {
+public class RiderService {
 
   private final RiderRepository repository;
 
