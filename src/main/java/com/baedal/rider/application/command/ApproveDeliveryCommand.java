@@ -11,10 +11,4 @@ public class ApproveDeliveryCommand {
     private Long riderId;
     private Long deliveryId;
   }
-
-  @Getter
-  @Builder
-  public static class Response {
-
-  }
 }
