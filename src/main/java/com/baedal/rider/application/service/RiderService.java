@@ -47,12 +47,19 @@ public class RiderService {
   }
 
   @Transactional
-  public void makeOnDuty(Long riderId) {
+  public void toggleDuty(Long riderId, boolean onDuty) {
+    if (onDuty) {
+      makeOnDuty(riderId);
+    } else {
+      makeOffDuty(riderId);
+    }
+  }
+
+  private void makeOnDuty(Long riderId) {
     riderRosterPort.makeOnDuty(riderId);
   }
 
-  @Transactional
-  public void makeOffDuty(Long riderId) {
+  private void makeOffDuty(Long riderId) {
     riderRosterPort.makeOffDuty(riderId);
   }
 

@@ -40,12 +40,7 @@ public class RiderController {
   public ResponseEntity<Void> makeOnDuty(
       @AuthenticationPrincipal Long riderId,
       @RequestBody ToggleDutyRequest request) {
-    if (request.onDuty()) {
-      service.makeOnDuty(riderId);
-    } else {
-      service.makeOffDuty(riderId);
-    }
-
+    service.toggleDuty(riderId, request.onDuty());
     return ResponseEntity.noContent().build();
   }
 }
