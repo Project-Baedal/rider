@@ -13,22 +13,24 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/rider/v0")
 public class RiderController {
 
   private final RiderService service;
 
-  @PostMapping("/v0/login")
+  @PostMapping("/login")
   @PermitAll
   public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
     LoginResponse response = service.authenticate(request.email(), request.password());
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/v0/signup")
+  @PostMapping("/signup")
   @PermitAll
   public ResponseEntity<Void> singUp(@RequestBody SignupRequest request) {
     service.signUp(request.email(), request.name(), request.password());
@@ -36,7 +38,7 @@ public class RiderController {
   }
 
   @PreAuthorize("hasRole('RIDER')")
-  @PatchMapping("/v0/me/duty")
+  @PatchMapping("/me/duty")
   public ResponseEntity<Void> makeOnDuty(
       @AuthenticationPrincipal Long riderId,
       @RequestBody ToggleDutyRequest request) {
