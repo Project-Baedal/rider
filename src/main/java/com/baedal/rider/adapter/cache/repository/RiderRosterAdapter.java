@@ -37,7 +37,7 @@ public class RiderRosterAdapter implements RiderRosterPort {
   public Set<Long> findAllOnDuty() {
     Set<Object> set = ops().members(key);
     return set == null ?
-        Collections.EMPTY_SET :
+        Collections.emptySet() :
         set.stream()
             .map(o -> Long.parseLong(o.toString()))
             .collect(Collectors.toSet());
