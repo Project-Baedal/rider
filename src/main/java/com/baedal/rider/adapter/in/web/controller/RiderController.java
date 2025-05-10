@@ -2,7 +2,7 @@ package com.baedal.rider.adapter.in.web.controller;
 
 import com.baedal.rider.adapter.in.web.mapper.RiderWebMapper;
 import com.baedal.rider.application.command.ApproveDeliveryCommand;
-import com.baedal.rider.application.port.in.RiderUsecase;
+import com.baedal.rider.application.service.RiderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RiderController {
 
   private final RiderWebMapper riderMapper;
-  private final RiderUsecase riderUsecase;
+  private final RiderService riderService;
 
   @PreAuthorize("hasRole('RIDER')")
   @PostMapping("/approveDelivery")
@@ -29,7 +29,7 @@ public class RiderController {
     ApproveDeliveryCommand.Request command = riderMapper.approveDeliveryToCommand(
         riderId, deliveryId
     );
-    riderUsecase.approveDelivery(command);
+    riderService.approveDelivery(command);
     return ResponseEntity.noContent().build();
   }
 }
