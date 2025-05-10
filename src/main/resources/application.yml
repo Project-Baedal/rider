@@ -9,3 +9,7 @@ spring:
 security:
   permit-all:
     urls: /v0/login, /v0/signup, /error
+
+rider:
+  roster:
+    key: on_duty

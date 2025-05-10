@@ -5,3 +5,13 @@ server:
 servers:
   delivery:
     url: http://localhost:8090/api/delivery/
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+logging:
+  level:
+    com.baedal.rider: DEBUG

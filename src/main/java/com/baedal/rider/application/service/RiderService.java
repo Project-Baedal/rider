@@ -3,15 +3,17 @@ package com.baedal.rider.application.service;
 import com.baedal.rider.adapter.presentation.response.LoginResponse;
 import com.baedal.rider.adapter.presentation.security.UserDetailsImpl;
 import com.baedal.rider.application.command.ApproveDeliveryCommand.Request;
-import com.baedal.rider.application.port.in.RiderUsecase;
 import com.baedal.rider.application.port.out.DeliveryCacheRepositoryPort;
 import com.baedal.rider.application.port.out.DeliveryClientPort;
 import com.baedal.rider.application.port.out.DeliveryLockPort;
 import com.baedal.rider.application.port.out.MessageSendPort;
 import com.baedal.rider.domain.DeliveryValidator;
+import com.baedal.rider.application.port.out.RiderRosterPort;
 import com.baedal.rider.domain.entity.Rider;
 import com.baedal.rider.domain.repository.RiderRepository;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class RiderService implements RiderUsecase {
+@Slf4j
+public class RiderService {
 
   private final RiderRepository repository;
 
@@ -27,8 +30,10 @@ public class RiderService implements RiderUsecase {
 
   private final UserDetailsService userDetailsService;
 
+  private final RiderRosterPort riderRosterPort;
+
   @Transactional
-  public void signup(String email, String nickname, String rawPassword) {
+  public void signUp(String email, String nickname, String rawPassword) {
     Rider rider = new Rider(email, nickname, passwordEncoder.encode(rawPassword));
     repository.save(rider);
   }
@@ -47,6 +52,27 @@ public class RiderService implements RiderUsecase {
     );
   }
 
+  @Transactional
+  public void toggleDuty(Long riderId, boolean onDuty) {
+    if (onDuty) {
+      makeOnDuty(riderId);
+    } else {
+      makeOffDuty(riderId);
+    }
+  }
+
+  private void makeOnDuty(Long riderId) {
+    riderRosterPort.makeOnDuty(riderId);
+  }
+
+  private void makeOffDuty(Long riderId) {
+    riderRosterPort.makeOffDuty(riderId);
+  }
+
+  private Set<Long> findAllOnDuty() {
+    return riderRosterPort.findAllOnDuty();
+  }
+
 
 
   private final DeliveryLockPort deliveryLockPort;
@@ -55,7 +81,6 @@ public class RiderService implements RiderUsecase {
   private final MessageSendPort messageSendPort;
   private final DeliveryValidator deliveryValidator;
 
-  @Override
   public void approveDelivery(Request req) {
 
     Long deliveryId = req.getDeliveryId();
