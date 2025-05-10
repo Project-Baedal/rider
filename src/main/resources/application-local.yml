@@ -1,6 +1,11 @@
 server:
   port: 8081
 
+
+servers:
+  delivery:
+    url: http://localhost:8090/api/delivery/
+
 spring:
   data:
     redis:

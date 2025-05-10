@@ -5,6 +5,8 @@ spring:
   output:
     ansi:
       enabled: always
+  profiles:
+    active: local
 
 security:
   permit-all:
